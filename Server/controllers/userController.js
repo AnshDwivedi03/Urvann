@@ -68,7 +68,7 @@ export const getUserData = async (req, res) => {
 };
 export const getPlants = async (req, res) => {
   try {
-    const plants = await Plant.find({ isAvailable: true });
+    const plants = await Plant.find({ availability: true });
     res.json({ success: true, plants });
   } catch (error) {
     res.status(500).json({ message: error.message });

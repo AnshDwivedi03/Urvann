@@ -16,7 +16,7 @@ export const AppProvider = ({ children }) => {
   const [pickupDate, setPickupDate] = useState("");
   const [returnDate, setReturnDate] = useState("");
 
-  const [cars, setCars] = useState([]);
+  const [plants, setPlants] = useState([]);
 
   //Function to check if user is logged in..
   const fetchUser = async () => {
@@ -33,11 +33,11 @@ export const AppProvider = ({ children }) => {
     }
   };
 
-  //Function to fetch all cars from the server
-  const fetchCars = async () => {
+  //Function to fetch all plants from the server
+  const fetchPlants = async () => {
     try {
-      const { data } = await axios.get("/api/user/cars");
-      data.success ? setCars(data.cars) : toast.error(data.message);
+      const { data } = await axios.get("/api/user/plants");
+      data.success ? setPlants(data.plants) : toast.error(data.message);
     } catch (error) {
       toast.error(error.message);
     }
@@ -57,7 +57,7 @@ export const AppProvider = ({ children }) => {
   useEffect(() => {
     const token = localStorage.getItem("token");
     setToken(token);
-    fetchCars();
+    fetchPlants();
   }, []);
   //useEffect to fetch user data when token is available
   useEffect(() => {
@@ -81,9 +81,9 @@ export const AppProvider = ({ children }) => {
     showLogin,
     setShowLogin,
     logout,
-    fetchCars,
-    cars,
-    setCars,
+    fetchPlants,
+    plants,
+    setPlants,
     pickupDate,
     setPickupDate,
     returnDate,

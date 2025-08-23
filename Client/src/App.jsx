@@ -3,7 +3,7 @@ import Navbar from "./components/Navbar";
 import { Routes, useLocation, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import CarDetails from "./pages/CarDetails";
-import Cars from "./pages/Cars";
+import Plants from "./pages/Plants";
 import Footer from "./components/Footer";
 import Dashboard from "./pages/owner/Dashboard";
 import Layout from "./pages/owner/Layout";
@@ -25,7 +25,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/car-details/:id" element={<CarDetails />} />
-        <Route path="/cars" element={<Cars />} />
+        <Route path="/plants" element={<Plants />} />
         {/*Route inside route */}
         <Route path="/owner" element={<Layout />}>
           <Route index element={<Dashboard />} />

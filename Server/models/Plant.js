@@ -5,55 +5,33 @@ const plantSchema = new mongoose.Schema(
     owner: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true,
+      required: false,
     },
-    brand: {
+    name: {
       type: String,
       required: true,
+      trim: true,
     },
-    model: {
-      type: String,
+    price: {
+      type: Number,
       required: true,
+      min: 0,
+    },
+    categories: {
+      type: [String], 
+      required: true,
+    },
+    availability: {
+      type: Boolean,
+      default: true,
+    },
+    description: {
+      type: String,
+      trim: true,
     },
     image: {
       type: String,
       required: true,
-    },
-    year: {
-      type: Number,
-      required: true,
-    },
-    category: {
-      type: String,
-      required: true,
-    },
-    seat_capacity: {
-      type: Number,
-      required: true,
-    },
-    fuel_type: {
-      type: String,
-      required: true,
-    },
-    transmission: {
-      type: String,
-      required: true,
-    },
-    pricePerDay: {
-      type: Number,
-      required: true,
-    },
-    location: {
-      type: String,
-      required: true,
-    },
-    description: {
-      type: String,
-      required: true,
-    },
-    isAvailable: {
-      type: Boolean,
-      default: true,
     },
   },
   {
@@ -61,5 +39,5 @@ const plantSchema = new mongoose.Schema(
   }
 );
 
-const Plant= mongoose.model("Plant", plantSchema);
-export default Plant;
+const Plant = mongoose.model("Plant", plantSchema);
+export default Plant;

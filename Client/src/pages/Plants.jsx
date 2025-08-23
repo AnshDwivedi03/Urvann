@@ -1,54 +1,51 @@
 import React, { useEffect, useState } from "react";
 import Title from "../components/Title";
 import { assets } from "../assets/assets";
-import CarCard from "../components/CarCard";
+import PlantCard from "../components/PlantCard";
 import { useSearchParams } from "react-router-dom";
 import { useAppContext } from "../context/AppContext";
-const Cars = () => {
+const Plants = () => {
   //getting search params from url
   const [searchParams] = useSearchParams();
   const pickupDate = searchParams.get("pickupDate");
   const pickupLocation = searchParams.get("pickupLocation");
-  const returnDate = searchParams.get("returnDate");
-  const { axios, cars } = useAppContext();
-  const isSearchData = pickupLocation && pickupDate && returnDate;
-  const [filteredCars, setFilterCars] = useState([]);
+  const { axios, plants } = useAppContext();
+  const isSearchData = pickupLocation && pickupDate;
+  const [filteredPlants, setFilterPlants] = useState([]);
   const [input, setInput] = useState("");
   const applyFilter = async () => {
     if (input === "") {
-      setFilterCars(cars);
+      setFilterPlants(plants);
       return null;
     }
-    const filtered = cars.slice().filter((car) => {
+    const filtered = plants.slice().filter((plant) => {
       return (
-        car.brand.toLowerCase().includes(input.toLowerCase()) ||
-        car.model.toLowerCase().includes(input.toLowerCase()) ||
-        car.category.toLowerCase().includes(input.toLowerCase()) ||
-        car.transmission.toLowerCase().includes(input.toLowerCase())
+        plant.name.toLowerCase().includes(input.toLowerCase()) ||
+        plant.categories.toLowerCase().includes(input.toLowerCase()) 
+       // plant.location.toLowerCase().includes(input.toLowerCase())
       );
     });
-    setFilterCars(filtered);
+    setFilterPlants(filtered);
   };
-  const searchCarAvail = async () => {
+  const searchPlantAvail = async () => {
     const { data } = await axios.post("/api/bookings/check-availability", {
       location: pickupLocation,
       pickupDate,
-      returnDate,
     });
     if (data.success) {
-      setFilterCars(data.availableCars);
-      if (data.availableCars.length === 0) {
-        toast("No cars available");
+      setFilterCars(data.availablePlants);
+      if (data.availablePlants.length === 0) {
+        toast("No plants available");
       }
       return null;
     }
   };
   useEffect(() => {
-    isSearchData && searchCarAvail();
+    isSearchData && searchPlantAvail();
   }, []);
   useEffect(() => {
-    cars.length > 0 && !isSearchData && applyFilter();
-  }, [input, cars]);
+    plants.length > 0 && !isSearchData && applyFilter();
+  }, [input, plants]);
 
   return (
     <div>
@@ -71,12 +68,12 @@ const Cars = () => {
       </div>
       <div className="px-6 md:px-16 lg:px-24 xl:px-32 mt-10">
         <p className="text-gray-500 xl:px-20 max-w-7xl mx-auto">
-          Showing {filteredCars.length} Cars
+          Showing {filteredPlants.length} Plants
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-4 xl:px-20 max-w-7xl mx-auto">
-          {filteredCars.map((car, index) => (
+          {filteredPlants.map((plant, index) => (
             <div key={index}>
-              <CarCard car={car} />
+              <PlantCard plant={plant} />
             </div>
           ))}
         </div>
@@ -85,4 +82,4 @@ const Cars = () => {
   );
 };
 
-export default Cars;
+export default Plants;
