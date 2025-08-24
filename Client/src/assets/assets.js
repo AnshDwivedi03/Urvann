@@ -95,27 +95,21 @@ export const menuLinks = [
 
 export const ownerMenuLinks = [
   {
-    name: "Dashboard",
-    path: "/owner",
-    icon: dashboardIcon,
-    coloredIcon: dashboardIconColored,
+  name: "Add Plant",
+    path: "/owner/add-plants",   // matches your App.jsx route
+    icon: assets.addPlantIcon,   // update if you have a flower/plant icon
+    coloredIcon: assets.addPlantIconColored,
   },
   {
-    name: "Add car",
-    path: "/owner/add-car",
-    icon: addIcon,
-    coloredIcon: addIconColored,
-  },
-  {
-    name: "Manage Cars",
-    path: "/owner/manage-cars",
-    icon: carIcon,
-    coloredIcon: carIconColored,
+      name: "Manage Plants",
+    path: "/owner/manage-plants", // also rename ManageCars page later
+    icon: assets.managePlantIcon,
+    coloredIcon: assets.managePlantIconColored,
   },
   {
     name: "Manage Bookings",
     path: "/owner/manage-bookings",
     icon: listIcon,
     coloredIcon: listIconColored,
-  },
+  },
 ];

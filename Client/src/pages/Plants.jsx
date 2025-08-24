@@ -10,7 +10,6 @@ const Plants = () => {
   const pickupDate = searchParams.get("pickupDate");
   const pickupLocation = searchParams.get("pickupLocation");
   const { axios, plants } = useAppContext();
-  const isSearchData = pickupLocation && pickupDate;
   const [filteredPlants, setFilterPlants] = useState([]);
   const [input, setInput] = useState("");
   const applyFilter = async () => {
@@ -33,7 +32,7 @@ const Plants = () => {
       pickupDate,
     });
     if (data.success) {
-      setFilterCars(data.availablePlants);
+      setFilterPlants(data.availablePlants);
       if (data.availablePlants.length === 0) {
         toast("No plants available");
       }
@@ -41,18 +40,18 @@ const Plants = () => {
     }
   };
   useEffect(() => {
-    isSearchData && searchPlantAvail();
+      searchPlantAvail();
   }, []);
   useEffect(() => {
-    plants.length > 0 && !isSearchData && applyFilter();
+    plants.length > 0 &&  applyFilter();
   }, [input, plants]);
 
   return (
     <div>
       <div className="flex flex-col items-center py-20 bg-light max-md:px-4">
         <Title
-          title="Available Cars"
-          subTitle="Browser our Selection of Premium Cars"
+          title="All Plants"
+          subTitle="Browser our Selection of Premium Plants"
         />
         <div className="flex items-center bg-white px-4 mt-6 max-w-140 w-full h-12 rounded-full shadow">
           <img src={assets.search_icon} className="w-4.5 h-4.5 mr-2"></img>
@@ -60,7 +59,7 @@ const Plants = () => {
             onChange={(e) => setInput(e.target.value)}
             value={input}
             type="text"
-            placeholder="Search by model or features"
+            placeholder="Search by availability or category"
             className="w-full h-full outline-none text-gray-500"
           ></input>
           <img src={assets.filter_icon} className="w-4.5 h-4.5 mr-2"></img>

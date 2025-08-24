@@ -1,16 +1,16 @@
 import imagekit from "../config/imagekit.js";
-
 import User from "../models/User.js";
 import fs from "fs";
 import Plant from "../models/Plant.js";
 import Booking from "../models/Booking.js";
 
+// Change user role to Owner
 export const changeRole = async (req, res) => {
   try {
     const { _id } = req.user;
     await User.findByIdAndUpdate(_id, { role: "owner" });
 
-    res.json({ success: true, message: "Now you can add plant" });
+    res.json({ success: true, message: "Now you can add plants" });
   } catch (error) {
     console.error("Error changing role:", error);
     res.status(500).json({
@@ -21,11 +21,16 @@ export const changeRole = async (req, res) => {
   }
 };
 
-export const addCar = async (req, res) => {
+// ---------------- ADD PLANTS ----------------
+export const addPlants = async (req, res) => {
   try {
     const { _id } = req.user;
-    let car = JSON.parse(req.body.carData);
+    let plant = JSON.parse(req.body.plantData);
     const imageFile = req.file;
+
+    if (!imageFile) {
+      return res.json({ success: false, message: "Image is required" });
+    }
 
     // Upload image to ImageKit
     const fileBuffer = fs.readFileSync(imageFile.path);
@@ -33,24 +38,11 @@ export const addCar = async (req, res) => {
     const response = await imagekit.upload({
       file: fileBuffer,
       fileName: imageFile.originalname,
-      folder: "/cars",
+      folder: "/plants",
     });
 
-    {
-      /*{
-      the response will contain in this format
-  fileId: 'xxx',
-  name: 'yourfile.jpg',
-  url: 'https://ik.imagekit.io/your_image_url.jpg',
-  thumbnailUrl: 'https://ik.imagekit.io/your_thumb_url.jpg',
-  filePath: '/cars/yourfile.jpg',
-  ...
-}
- */
-    }
-
-    // optmization
-    var optimizeImgUrl = imagekit.url({
+    // Optimize Image URL
+    const optimizeImgUrl = imagekit.url({
       path: response.filePath,
       transformation: [
         { width: "1000" },
@@ -60,92 +52,99 @@ export const addCar = async (req, res) => {
     });
 
     const image = optimizeImgUrl;
-    await Car.create({ ...car, owner: _id, image });
 
-    res.json({ success: true, message: "Car Added" });
+    await Plant.create({ ...plant, owner: _id, image });
+
+    res.json({ success: true, message: "Plant Added Successfully" });
   } catch (error) {
-    console.error("Error changing role:", error);
+    console.error("Error adding plant:", error);
     res.status(500).json({
       success: false,
-      message: "Something went wrong while changing the role.",
+      message: "Something went wrong while adding the plant.",
       error: error.message,
     });
   }
 };
 
-export const getOwnerCars = async (req, res) => {
+// ---------------- GET OWNER PLANTS ----------------
+export const getOwnerPlants = async (req, res) => {
   try {
     const { _id } = req.user;
-    const cars = await Car.find({ owner: _id });
-    res.json({ success: true, cars });
+    const plants = await Plant.find({ owner: _id });
+    res.json({ success: true, plants });
   } catch (error) {
-    console.error("Error changing role:", error);
+    console.error("Error fetching plants:", error);
     res.status(500).json({
       success: false,
-      message: "Something went wrong while changing the role.",
+      message: "Something went wrong while fetching your plants.",
       error: error.message,
     });
   }
 };
 
-export const toggleCarAvailability = async (req, res) => {
+// ---------------- TOGGLE PLANT AVAILABILITY ----------------
+export const togglePlantAvailability = async (req, res) => {
   try {
     const { _id } = req.user;
-    const { carId } = req.body;
-    const car = await Car.findById(carId);
+    const { plantId } = req.body;
+    const plant = await Plant.findById(plantId);
 
-    //checking car belongs to the user
-    if (car.owner.toString() !== _id.toString())
+    if (!plant) return res.json({ success: false, message: "Plant not found" });
+
+    // check if plant belongs to user
+    if (plant.owner.toString() !== _id.toString()) {
       return res.json({ success: false, message: "Unauthorized" });
-    car.isAvailable = !car.isAvailable;
-    await car.save();
-    res.json({ success: true, message: "Availability toggled" });
-  } catch (error) {
-    console.error("Error changing role:", error);
-    res.status(500).json({
-      success: false,
-      message: "Something went wrong while changing the role.",
-      error: error.message,
-    });
-  }
-};
-
-export const deleteCar = async (req, res) => {
-  try {
-    const { _id } = req.user;
-    const { carId } = req.body;
-
-    // Find the car and ensure it belongs to the current owner
-    const car = await Car.findOne({ _id: carId, owner: _id });
-    if (!car) {
-      return res.json({ success: false, message: "Unauthorized or car not found" });
     }
 
-    // Delete the car directly (no validation triggered)
-    await Car.deleteOne({ _id: carId });
+    plant.isAvailable = !plant.isAvailable;
+    await plant.save();
 
-    res.json({ success: true, message: "Car deleted successfully" });
+    res.json({ success: true, message: "Availability toggled" });
   } catch (error) {
-    console.error("Error deleting car:", error);
+    console.error("Error toggling plant availability:", error);
     res.status(500).json({
       success: false,
-      message: "Something went wrong while deleting the car.",
+      message: "Something went wrong while toggling availability.",
       error: error.message,
     });
   }
 };
 
+// ---------------- DELETE PLANT ----------------
+export const deletePlant = async (req, res) => {
+  try {
+    const { _id } = req.user;
+    const { plantId } = req.body;
 
-//Api to get Dashboard Data..
+    const plant = await Plant.findOne({ _id: plantId, owner: _id });
+    if (!plant) {
+      return res.json({ success: false, message: "Unauthorized or plant not found" });
+    }
+
+    await Plant.deleteOne({ _id: plantId });
+
+    res.json({ success: true, message: "Plant deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting plant:", error);
+    res.status(500).json({
+      success: false,
+      message: "Something went wrong while deleting the plant.",
+      error: error.message,
+    });
+  }
+};
+
+// ---------------- DASHBOARD DATA ----------------
 export const getDashboardData = async (req, res) => {
   try {
     const { _id, role } = req.user;
 
     if (role !== "owner")
       return res.json({ success: false, message: "Unauthorized" });
-    const cars = await Car.find({ owner: _id });
+
+    const plants = await Plant.find({ owner: _id });
     const bookings = await Booking.find({ owner: _id })
-      .populate("car")
+      .populate("plant")
       .sort({ createdAt: -1 });
 
     const pendingBookings = await Booking.find({
@@ -157,37 +156,41 @@ export const getDashboardData = async (req, res) => {
       status: "confirmed",
     });
 
-    //Monthly Revenue
     const monthlyRevenue = bookings
       .slice()
       .filter((booking) => booking.status === "confirmed")
       .reduce((acc, booking) => acc + booking.price, 0);
+
     const dashboardData = {
-      totalCars: cars.length,
+      totalPlants: plants.length,
       totalBookings: bookings.length,
       pendingBookings: pendingBookings.length,
       completedBookings: completedBookings.length,
       recentBookings: bookings.slice(0, 3),
       monthlyRevenue,
     };
+
     res.json({ success: true, dashboardData });
   } catch (error) {
-    console.error("Error changing role:", error);
+    console.error("Error fetching dashboard data:", error);
     res.status(500).json({
       success: false,
-      message: "Something went wrong while changing the role.",
+      message: "Something went wrong while fetching dashboard data.",
       error: error.message,
     });
   }
 };
 
-//API to update user image..
+// ---------------- UPDATE USER IMAGE ----------------
 export const updateUserImage = async (req, res) => {
   try {
     const { _id } = req.user;
 
     const imageFile = req.file;
-    // Upload image to ImageKit
+    if (!imageFile) {
+      return res.json({ success: false, message: "No image uploaded" });
+    }
+
     const fileBuffer = fs.readFileSync(imageFile.path);
 
     const response = await imagekit.upload({
@@ -196,8 +199,7 @@ export const updateUserImage = async (req, res) => {
       folder: "/users",
     });
 
-    // optmization
-    var optimizeImgUrl = imagekit.url({
+    const optimizeImgUrl = imagekit.url({
       path: response.filePath,
       transformation: [
         { width: "400" },
@@ -206,15 +208,14 @@ export const updateUserImage = async (req, res) => {
       ],
     });
 
-    const image = optimizeImgUrl;
-    await User.findByIdAndUpdate(_id, { image });
+    await User.findByIdAndUpdate(_id, { image: optimizeImgUrl });
     res.json({ success: true, message: "Image Updated" });
   } catch (error) {
-    console.error("Error changing role:", error);
+    console.error("Error updating user image:", error);
     res.status(500).json({
       success: false,
-      message: "Something went wrong while changing the role.",
+      message: "Something went wrong while updating the image.",
       error: error.message,
-    });
-  }
+    });
+  }
 };

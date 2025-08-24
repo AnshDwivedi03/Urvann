@@ -5,9 +5,8 @@ import Home from "./pages/Home";
 import PlantsDetails from "./pages/PlantsDetails";
 import Plants from "./pages/Plants";
 import Footer from "./components/Footer";
-import Dashboard from "./pages/owner/Dashboard";
 import Layout from "./pages/owner/Layout";
-import AddCar from "./pages/owner/AddCar";
+import AddPlants from "./pages/owner/AddPlants";
 import ManageCars from "./pages/owner/ManageCar";
 import ManageBookings from "./pages/owner/ManageBookings";
 import Login from "./components/Login";
@@ -28,8 +27,7 @@ const App = () => {
         <Route path="/plants" element={<Plants />} />
         {/*Route inside route */}
         <Route path="/owner" element={<Layout />}>
-          <Route index element={<Dashboard />} />
-          <Route path="add-car" element={<AddCar />} />
+          <Route path="add-plants" element={<AddPlants />} />
           <Route path="manage-cars" element={<ManageCars />} />
           <Route path="manage-bookings" element={<ManageBookings />} />
         </Route>
