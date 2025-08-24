@@ -9,19 +9,21 @@ const PlantCard = ({ plant }) => {
   return (
     <div
       onClick={() => {
-        navigate(`/plant-details/${plant._id}`);
+        navigate(`/plants-details/${plant._id}`);
         window.scrollTo({ top: 0, behavior: "smooth" });
       }}
       className="group rounded-xl overflow-hidden shadow-lg hover:-translate-y-1 transition-transform duration-500 cursor-pointer bg-white"
     >
       {/* Image & Availability */}
-      <div className="relative h-48 overflow-hidden">
-        <img
-          src={plant.image}
-          alt={plant.name}
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-          loading="lazy"
-        />
+      <div className="relative w-full overflow-hidden h-64">
+  <img
+  src={plant.image}
+  alt={plant.name}
+  className="w-full h-auto object-contain transition-transform duration-500 group-hover:scale-105"
+  loading="lazy"
+/>
+
+
         {plant.availability && (
           <span className="absolute top-4 left-4 bg-primary/90 text-white text-xs px-2.5 py-1 rounded-full">
             Available Now

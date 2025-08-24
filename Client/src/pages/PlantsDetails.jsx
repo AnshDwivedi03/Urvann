@@ -5,7 +5,7 @@ import Loader from "../components/Loader";
 import { useAppContext } from "../context/AppContext";
 import toast from "react-hot-toast";
 
-const CarDetails = () => {
+const PlantsDetails = () => {
   const { id } = useParams();
   const { cars, axios, pickupDate, setPickupDate, returnDate, setReturnDate } =
     useAppContext();
@@ -160,4 +160,4 @@ const CarDetails = () => {
   );
 };
 
-export default CarDetails;
+export default PlantsDetails;

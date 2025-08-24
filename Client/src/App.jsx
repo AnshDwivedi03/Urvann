@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import Navbar from "./components/Navbar";
 import { Routes, useLocation, Route } from "react-router-dom";
 import Home from "./pages/Home";
-import CarDetails from "./pages/CarDetails";
+import PlantsDetails from "./pages/PlantsDetails";
 import Plants from "./pages/Plants";
 import Footer from "./components/Footer";
 import Dashboard from "./pages/owner/Dashboard";
@@ -24,7 +24,7 @@ const App = () => {
       {!isOnwerPath && <Navbar />}
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/car-details/:id" element={<CarDetails />} />
+        <Route path="/plants-details/:id" element={<PlantsDetails />} />
         <Route path="/plants" element={<Plants />} />
         {/*Route inside route */}
         <Route path="/owner" element={<Layout />}>
