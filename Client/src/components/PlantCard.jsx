@@ -34,7 +34,7 @@ const PlantCard = ({ plant }) => {
             {currency}
             {plant.price}
           </span>
-          <span className="text-sm text-white/80">/day</span>
+          <span className="text-sm text-white/80"></span>
         </div>
       </div>
 

@@ -108,13 +108,23 @@ const Hero = () => {
   initial={{ y: 100, opacity: 0 }}
   animate={{ y: 0, opacity: 1 }}
   transition={{ duration: 0.8, delay: 0.6 }}
-  className="w-full max-w-7xl h-[400px] md:h-[500px] flex items-center justify-center object-contain overflow-hidden"
+  className="w-full max-w-7xl h-[400px] md:h-[500px] flex items-center justify-center object-contain overflow-hidden rounded-2xl"
 >
-  <img
+ <motion.div
+  className="w-full h-[400px] md:h-[500px] overflow-hidden"
+  initial={{ y: 50, opacity: 0 }}     
+  animate={{ y: 0, opacity: 1 }}      
+transition={{ duration: 2, delay: 0.8, ease: "easeOut" }} 
+  whileHover={{ scale: 1.03 }}        
+>
+  <motion.img
     src={assets.main_car}
     alt="car"
-    className="w-full h-full object-contain md:object-cover"
+    className="w-full h-full object-contain md:object-cover transition-all duration-500"
+    style={{ filter: "brightness(100%)" }}
+    whileHover={{ filter: "brightness(85%)" }}  
   />
+</motion.div>
 </motion.div>
 
     </motion.div>
