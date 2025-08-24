@@ -69,17 +69,18 @@ export const addPlants = async (req, res) => {
 // ---------------- GET OWNER PLANTS ----------------
 export const getOwnerPlants = async (req, res) => {
   try {
-    const { _id } = req.user;
-    const plants = await Plant.find({ owner: _id });
+    const { category } = req.query;
+    let query = {};
+
+    if (category && category.toLowerCase() !== "all") {
+      query = { categories: { $in: [category] } };
+    }
+
+    const plants = await Plant.find(query);
     res.json({ success: true, plants });
-  } catch (error) {
-    console.error("Error fetching plants:", error);
-    res.status(500).json({
-      success: false,
-      message: "Something went wrong while fetching your plants.",
-      error: error.message,
-    });
-  }
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
 };
 
 // ---------------- TOGGLE PLANT AVAILABILITY ----------------
