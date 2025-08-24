@@ -11,7 +11,7 @@ import {
 } from "../controllers/ownerController.js";
 import upload from "../middleware/multer.js";
 
-const ownerRoute = express();
+const ownerRoute = express.Router();
 
 ownerRoute.post("/change-role", userAuth, changeRole);
 ownerRoute.post("/add-plants", upload.single("image"), userAuth, addPlants);

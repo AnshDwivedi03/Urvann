@@ -2,7 +2,7 @@ import express from "express";
 import { loginUser, registerUser,getUserData, getPlants  } from "../controllers/userController.js";
 import  {userAuth } from "../middleware/auth.js";
 
-const userRoutes= express();
+const userRoutes= express.Router();
 
 
 userRoutes.post('/register',registerUser);

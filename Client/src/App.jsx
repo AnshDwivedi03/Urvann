@@ -7,7 +7,7 @@ import Plants from "./pages/Plants";
 import Footer from "./components/Footer";
 import Layout from "./pages/owner/Layout";
 import AddPlants from "./pages/owner/AddPlants";
-import ManageCars from "./pages/owner/ManageCar";
+import ManagePlants from "./pages/owner/ManagePlants";
 import ManageBookings from "./pages/owner/ManageBookings";
 import Login from "./components/Login";
 import { Toaster } from "react-hot-toast";
@@ -28,7 +28,7 @@ const App = () => {
         {/*Route inside route */}
         <Route path="/owner" element={<Layout />}>
           <Route path="add-plants" element={<AddPlants />} />
-          <Route path="manage-cars" element={<ManageCars />} />
+          <Route path="manage-plants" element={<ManagePlants />} />
           <Route path="manage-bookings" element={<ManageBookings />} />
         </Route>
       </Routes>

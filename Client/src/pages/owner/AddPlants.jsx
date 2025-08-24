@@ -30,7 +30,11 @@ const AddPlants = () => {
       formData.append("image", image);
       formData.append("plantData", JSON.stringify(plant));
 
-      const { data } = await axios.post("/api/owner/add-plant", formData);
+      const { data } = await axios.post("/api/owner/add-plants", formData);
+
+
+
+
       if (data.success) {
         toast.success(data.message);
         setImage(null);

@@ -15,7 +15,7 @@ const Sidebar = () => {
   key: "abc123"
 */
   }
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState(null);
   const updateImage = async () => {
     try {
       const formData = new FormData();
@@ -24,7 +24,7 @@ const Sidebar = () => {
       if (data.success) {
         fetchUser();
         toast.success(data.message);
-        setImage("");
+        setImage(null);
       } else {
         toast.message(data.message);
       }
@@ -37,8 +37,9 @@ const Sidebar = () => {
       <div className="group relative">
         <label htmlFor="image">
           <img
-            src={image ? URL.createObjectURL(image) : user?.image}
-            className="h-9 md:h-14 w-9 md:w-14 rounded-full mx-auto "
+           src={image ? URL.createObjectURL(image) : user?.image || undefined}
+
+            className="h-9 md:h-14 w-9 md:w-14 rounded-full mx-auto " alt=""
           ></img>
           <input
             type="file"

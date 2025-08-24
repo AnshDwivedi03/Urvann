@@ -96,13 +96,13 @@ export const menuLinks = [
 export const ownerMenuLinks = [
   {
   name: "Add Plant",
-    path: "/owner/add-plants",   // matches your App.jsx route
-    icon: assets.addPlantIcon,   // update if you have a flower/plant icon
+    path: "/owner/add-plants",   
+    icon: assets.addPlantIcon, 
     coloredIcon: assets.addPlantIconColored,
   },
   {
       name: "Manage Plants",
-    path: "/owner/manage-plants", // also rename ManageCars page later
+    path: "/owner/manage-plants", 
     icon: assets.managePlantIcon,
     coloredIcon: assets.managePlantIconColored,
   },
