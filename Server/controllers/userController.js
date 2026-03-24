@@ -10,25 +10,25 @@ function generateToken(userId) {
 
 export const registerUser = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, role } = req.body;
 
     if (!name || !email || !password) {
       return res
         .status(400)
-        .json({ Success: false, Message: "Please fill all fields" });
+        .json({ success: false, message: "Please fill all fields" });
     }
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res
         .status(400)
-        .json({ Success: false, Message: "User already exists" });
+        .json({ success: false, message: "User already exists" });
     }
 
     const hashPass = await bcrypt.hash(password, 10);
-    const user = await User.create({ name, email, password: hashPass });
+    const user = await User.create({ name, email, password: hashPass, role: role || "user" });
     const token = generateToken(user._id.toString());
-    res.status(200).json({ success: true, token});
+    res.status(200).json({ success: true, token, user });
 
   } catch (err) {
     res.status(500).json({ message: err.message });

@@ -45,13 +45,13 @@ const ManageBookings = () => {
     <div className="px-4 pt-10 md:px-10 w-full">
       <Title
         title="Manage Bookings"
-        subTitle="View all listed cars, update their details or remove them from booking platform."
+        subTitle="View all plant orders, update their status or cancel them."
       />
       <div className="max-w-3xl w-full rounded-md overflow-hidden border border-borderColor mt-6">
         <table className="w-full border-collapse text-left text-sm text-gray-600">
           <thead className="text-gray-500">
             <tr>
-              <th className="p-3 font-medium">Car</th>
+              <th className="p-3 font-medium">Plant</th>
               <th className="p-3 font-medium max-md:hidden">Date Range</th>
               <th className="p-3 font-medium">Total</th>
               <th className="p-3 font-medium max-md:hidden">Payment</th>
@@ -65,14 +65,20 @@ const ManageBookings = () => {
                 className="border-t border-borderColor text-gray-500"
               >
                 <td className="p-3 flex items-center gap-3">
-                  <img
-                    src={booking.car.image}
-                    alt={`${booking.car.brand} ${booking.car.model}`}
-                    className="h-12 w-12 aspect-square rounded-md object-cover"
-                  />
-                  <p className="font-medium max-md:hidden">
-                    {booking.car.brand} {booking.car.model}
-                  </p>
+                  {booking.plant ? (
+                    <>
+                      <img
+                        src={booking.plant.image}
+                        alt={booking.plant.name}
+                        className="h-12 w-12 aspect-square rounded-md object-cover"
+                      />
+                      <p className="font-medium max-md:hidden">
+                        {booking.plant.name}
+                      </p>
+                    </>
+                  ) : (
+                    <p>Plant Deleted</p>
+                  )}
                 </td>
                 <td className="p-3 max-md:hidden">
                   {booking.pickupDate.split("T")[0]} to{" "}

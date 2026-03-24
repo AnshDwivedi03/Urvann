@@ -8,7 +8,8 @@ export const userAuth = async (req, res, next) => {
     return res.status(401).json({ message: "Unauthorized" });
   }
   try {
-    const userId = jwt.decode(token, process.env.JWT_SECRET); // ✅ correct
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = typeof decoded === "string" ? decoded : decoded.id || decoded;
 
     if (!userId) {
       return res.status(401).json({ message: "Unauthorized" });

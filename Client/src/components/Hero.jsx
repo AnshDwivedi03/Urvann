@@ -4,19 +4,12 @@ import { useAppContext } from "../context/AppContext";
 import { motion } from "motion/react";
 
 const Hero = () => {
-  const [pickupLocation, setPickupLocation] = useState("");
-  const { pickupDate, setPickupDate, returnDate, setReturnDate, navigate } =
-    useAppContext();
+  const [searchQuery, setSearchQuery] = useState("");
+  const { navigate } = useAppContext();
+  
   const handleSearch = (e) => {
     e.preventDefault();
-    navigate(
-      "/car?pickupLocation=" +
-        pickupLocation +
-        "&pickupDate=" +
-        pickupDate +
-        "&returnDate=" +
-        returnDate
-    );
+    navigate(`/plants?search=${searchQuery}`);
   };
   return (
     <motion.div
@@ -57,49 +50,24 @@ const Hero = () => {
         animate={{ scale: 1, y: 0, opacity: 1 }}
         transition={{ duration: 0.6, delay: 0.4 }}
         onSubmit={handleSearch}
-        className="flex flex-col md:flex-row items-start md:items-center justify-between p-6 rounded-lg md:rounded-full w-full max-w-80 md:max-w-200 bg-emerald-400 shadow-[0px_8px_20px_rgba(0,0,0,0.1)]"
+        className="flex items-center justify-between p-2 pl-6 rounded-full w-full max-w-80 md:max-w-160 bg-white shadow-2xl border border-emerald-100"
       >
-        <div className="flex flex-col md:flex-row items-start md:items-center gap-35 min-md:ml-8">
-          <div className="flex flex-col items-start gap-2">
-            <select
-              required
-              value={pickupLocation}
-              onChange={(e) => setPickupLocation(e.target.value)}
-            >
-              <option value=""> Pickup Location</option>
-              {cityList.map((city) => (
-                <option key={city} value={city}>
-                  {city}
-                </option>
-              ))}
-            </select>
-            <p className="px-1 text-sm text-gray-500">
-              {" "}
-              {pickupLocation ? pickupLocation : "Please Select Location"}
-            </p>
-          </div>
-          <div className="flex flex-col items-start gap-1">
-            <label htmlFor="pickup-date">Pick-up Date</label>
-            <input
-              value={pickupDate}
-              onChange={(e) => setPickupDate(e.target.value)}
-              type="date"
-              id="pickup-date"
-              min={new Date().toISOString().split("T")[0]}
-              className="text-sm text-gray-500"
-              required
-            />
-          </div>
-        </div>
+        <input 
+          type="text"
+          placeholder="Search for indoor plants, succulents..."
+          className="flex-1 outline-none text-gray-600 bg-transparent placeholder:text-gray-400"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className="flex items-center justify-center gap-1 px-9 py-3 max-sm:mt-4 bg-primary hover:bg-primary-dull text-white rounded-full cursor-pointer"
+          className="flex items-center justify-center gap-2 px-8 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-full cursor-pointer font-medium"
         >
           <img
             src={assets.search_icon}
             alt="search"
-            className="brightness-300"
+            className="w-4 h-4 brightness-200"
           />
           Search
         </motion.button>
@@ -118,9 +86,9 @@ transition={{ duration: 2, delay: 0.8, ease: "easeOut" }}
   whileHover={{ scale: 1.03 }}        
 >
   <motion.img
-    src={assets.main_car}
-    alt="car"
-    className="w-full h-full object-contain md:object-cover transition-all duration-500"
+    src={assets.banner_img}
+    alt="plants"
+    className="w-full h-full object-cover transition-all duration-500 rounded-2xl shadow-2xl border-4 border-white"
     style={{ filter: "brightness(100%)" }}
     whileHover={{ filter: "brightness(85%)" }}  
   />

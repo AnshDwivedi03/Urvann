@@ -3,12 +3,16 @@ import Title from "../components/Title";
 import { assets } from "../assets/assets";
 import PlantCard from "../components/PlantCard";
 import { useAppContext } from "../context/AppContext";
+import { useLocation } from "react-router-dom";
 
 const Plants = () => {
   const { plants } = useAppContext();
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const initialSearch = searchParams.get("search") || "";
 
   const [filteredPlants, setFilteredPlants] = useState([]);
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState(initialSearch);
   const [showFilter, setShowFilter] = useState(false);
   const [filterCategory, setFilterCategory] = useState("all");
 
@@ -72,12 +76,15 @@ const Plants = () => {
 
           {/* Filter Dropdown */}
           {showFilter && (
-            <div className="absolute top-14 right-0 bg-white shadow-lg rounded-lg p-3 w-40 z-10">
-              {["all", "Indoor", "Outdoor"].map((cat) => (
+            <div className="absolute top-14 right-0 bg-white shadow-lg rounded-lg p-3 w-40 z-10 border border-gray-100">
+              {["all", "Indoor", "Outdoor", "Flowering", "Succulent", "Medicinal"].map((cat) => (
                 <button
                   key={cat}
-                  className="block w-full text-left px-2 py-1 hover:bg-gray-100 rounded"
-                  onClick={() => setFilterCategory(cat)}
+                  className={`block w-full text-left px-2 py-1.5 hover:bg-green-50 rounded transition-colors ${filterCategory === cat ? 'text-green-600 font-semibold' : 'text-gray-600'}`}
+                  onClick={() => {
+                    setFilterCategory(cat);
+                    setShowFilter(false);
+                  }}
                 >
                   {cat}
                 </button>

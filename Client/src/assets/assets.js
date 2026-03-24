@@ -95,21 +95,27 @@ export const menuLinks = [
 
 export const ownerMenuLinks = [
   {
-  name: "Add Plant",
-    path: "/owner/add-plants",   
-    icon: assets.addPlantIcon, 
-    coloredIcon: assets.addPlantIconColored,
+    name: "Dashboard",
+    path: "/owner",
+    icon: assets.dashboardIcon,
+    coloredIcon: assets.dashboardIconColored,
   },
   {
-      name: "Manage Plants",
-    path: "/owner/manage-plants", 
-    icon: assets.managePlantIcon,
-    coloredIcon: assets.managePlantIconColored,
+    name: "Add Plant",
+    path: "/owner/add-plants",
+    icon: assets.addIcon,
+    coloredIcon: assets.addIconColored,
+  },
+  {
+    name: "Manage Plants",
+    path: "/owner/manage-plants",
+    icon: assets.listIcon,
+    coloredIcon: assets.listIconColored,
   },
   {
     name: "Manage Bookings",
     path: "/owner/manage-bookings",
-    icon: listIcon,
-    coloredIcon: listIconColored,
-  },
+    icon: assets.listIcon, // Using listIcon as placeholder if unique one's missing
+    coloredIcon: assets.listIconColored,
+  },
 ];

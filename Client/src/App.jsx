@@ -9,9 +9,11 @@ import Layout from "./pages/owner/Layout";
 import AddPlants from "./pages/owner/AddPlants";
 import ManagePlants from "./pages/owner/ManagePlants";
 import ManageBookings from "./pages/owner/ManageBookings";
+import Dashboard from "./pages/owner/Dashboard";
 import Login from "./components/Login";
 import { Toaster } from "react-hot-toast";
 import { useAppContext } from "./context/AppContext";
+import MyBookings from "./pages/MyBookings";
 
 const App = () => {
   const { showLogin } = useAppContext();
@@ -25,8 +27,10 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/plants-details/:id" element={<PlantsDetails />} />
         <Route path="/plants" element={<Plants />} />
+        <Route path="/my-bookings" element={<MyBookings />} />
         {/*Route inside route */}
         <Route path="/owner" element={<Layout />}>
+          <Route index element={<Dashboard />} />
           <Route path="add-plants" element={<AddPlants />} />
           <Route path="manage-plants" element={<ManagePlants />} />
           <Route path="manage-bookings" element={<ManageBookings />} />

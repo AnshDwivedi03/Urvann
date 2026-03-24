@@ -1,80 +1,41 @@
 import Booking from "../models/Booking.js";
 import Plant from "../models/Plant.js";
 
-// Function to check availability of Plant
-const checkAvailability = async (car, pickupDate) => {
-  const bookings = await Booking.find({
-    car,
-    pickupDate: { $lte: returnDate },
-  });
-  return bookings.length === 0;
-};
-
-// API to check availability of Cars for the given Date and location
-export const checkAvailabilityofCars = async (req, res) => {
-  try {
-    const { location, pickupDate, returnDate } = req.body;
-
-    const cars = await Car.find({ location, isAvailable: true });
-
-    const availableCarsPromise = cars.map(async (car) => {
-      const isAvailable = await checkAvailability(
-        car._id,
-        pickupDate,
-        returnDate
-      );
-      return { ...car._doc, isAvailable };
-    });
-
-    let availbleCars = await Promise.all(availableCarsPromise);
-    availbleCars = availbleCars.filter((car) => car.isAvailable === true);
-
-    res.json({ success: true, availbleCars });
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).json({
-      success: false,
-      message: "Something went wrong while fetching available cars.",
-      error: error.message,
-    });
-  }
-};
-
 // API to create booking
 export const createBooking = async (req, res) => {
   try {
     const { _id } = req.user;
-    const { car, pickupDate, returnDate } = req.body;
+    const { plant, quantity, totalAmount } = req.body;
 
-    const isAvailable = await checkAvailability(car, pickupDate, returnDate);
-    if (!isAvailable)
-      return res.json({ success: false, message: "Car is not available" });
-
-    const carData = await Car.findById(car);
-    if (!carData) {
-      return res.json({ success: false, message: "Car not found" });
+    const plantData = await Plant.findById(plant);
+    if (!plantData) {
+      return res.json({ success: false, message: "Plant not found" });
     }
 
-    const picked = new Date(pickupDate);
-    const returned = new Date(returnDate);
-    const noOfDays = Math.ceil((returned - picked) / (1000 * 60 * 60 * 24));
-    const price = carData.pricePerDay * noOfDays;
+    if (!plantData.availability) {
+      return res.json({ success: false, message: "Plant is temporarily unavailable" });
+    }
+
+    // Default to today for plant purchases
+    const pickupDate = new Date();
+    const returnDate = new Date();
+    const price = totalAmount || plantData.price * (quantity || 1);
 
     await Booking.create({
-      car,
-      owner: carData.owner,
+      plant,
+      owner: plantData.owner,
       user: _id,
       pickupDate,
       returnDate,
       price,
     });
 
-    return res.json({ success: true, message: "Booking Created" });
+    return res.json({ success: true, message: "Plant Booked Successfully" });
   } catch (error) {
     console.error(error.message);
     res.status(500).json({
       success: false,
-      message: "Something went wrong while creating booking.",
+      message: "Something went wrong while booking.",
       error: error.message,
     });
   }
@@ -85,7 +46,7 @@ export const getUserBookings = async (req, res) => {
   try {
     const { _id } = req.user;
     const bookings = await Booking.find({ user: _id })
-      .populate("car")
+      .populate("plant")
       .sort({ createdAt: -1 });
 
     res.json({ success: true, bookings });
@@ -106,7 +67,7 @@ export const getOwnerBookings = async (req, res) => {
       return res.json({ success: false, message: "Unauthorized" });
 
     const bookings = await Booking.find({ owner: req.user._id })
-      .populate("car user")
+      .populate("plant user")
       .select("-user.password")
       .sort({ createdAt: -1 });
 
@@ -124,7 +85,7 @@ export const getOwnerBookings = async (req, res) => {
 // API to change booking status
 export const changeBookingStatus = async (req, res) => {
   try {
-    const { _id } = req.user; // FIXED: using _id, not id
+    const { _id } = req.user;
     const { bookingId, status } = req.body;
 
     const booking = await Booking.findById(bookingId);

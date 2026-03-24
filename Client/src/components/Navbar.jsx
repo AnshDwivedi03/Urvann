@@ -57,6 +57,11 @@ const Navbar = () => {
         ))}
 
         <div className="flex max-sm:flex-col item-start sm:items-center gap-6">
+          {user && (
+            <Link to="/my-bookings" className="cursor-pointer">
+              My Orders
+            </Link>
+          )}
           <button
             onClick={() => {
               isOwner ? navigate("/owner") : changeRole();
